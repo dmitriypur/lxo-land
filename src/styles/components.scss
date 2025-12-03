@@ -1,0 +1,136 @@
+@use './globals' as *;
+
+.btn{
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  text-decoration: none;
+  vertical-align: middle;
+  white-space: nowrap;
+  width: 100%;
+  padding: 16px;
+  font-weight: 500;
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 3;
+
+  span{
+    position: relative;
+    z-index: 4;
+  }
+
+  &::after{
+    content: '';
+    position: absolute;
+    inset: -1px;
+  }
+}
+
+.btn-pink{
+  background: $pinkGr;
+  width: 230px;
+  box-shadow: 0px 14px 34px 0px #56101026;
+  transition: box-shadow .3s;
+
+  span{
+    color: $dark;
+  }
+
+  &::after{
+    background: $pinkGrHover;
+    opacity: 0;
+    transition: opacity .3s;
+  }
+
+  &:hover{
+    box-shadow: 0px 14px 34px 0px #56101073;
+
+    &::after{
+      opacity: 1;
+    }
+
+    span{
+      text-decoration: none;
+    }
+  }
+}
+
+.btn-red{
+  background: $primaryGr;
+  width: 230px;
+
+  span{
+    color: $white;
+  }
+
+  &::after{
+    background: $primaryGrHover;
+    opacity: 0;
+    transition: opacity .3s;
+  }
+
+  &:hover{
+    &::after{
+      opacity: 1;
+    }
+
+    span{
+      text-decoration: none;
+    }
+  }
+}
+
+.btn-white{
+  background: $black;
+  width: 230px;
+
+  span{
+    color: $dark;
+    z-index: 2;
+    transition: color .3s;
+  }
+
+  &::before{
+    content: '';
+    position: absolute;
+    background: $primaryGr;
+    inset: 0;
+    border-radius: 9px;
+    z-index: 0;
+    opacity: 0;
+    transition: opacity .3s;
+  }
+
+  &::after{
+    background: $white;
+    inset: 1px;
+    border-radius: 9px;
+  }
+
+  &:hover{
+    &::before{
+      opacity: 1;
+    }
+
+    span{
+      color: $primary;
+    }
+  }
+}
+
+
+.section-title{
+  font-size: 64px;
+  font-weight: 700;
+  text-align: center;
+
+  span{
+    color: $primary;
+  }
+
+  @media (max-width: $tablet) {
+    font-size: 32px;
+  }
+}

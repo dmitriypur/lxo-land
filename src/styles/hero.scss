@@ -1,0 +1,287 @@
+@use './globals' as *;
+
+.hero { 
+    background: $white; 
+    border-bottom-left-radius: 300px; 
+    border-bottom-right-radius: 300px;
+    box-shadow: 0 14px 24px rgba(0,0,0,.06); 
+    overflow: hidden;
+    padding-top: 20px;
+
+    @media (max-width: $pc) {
+        padding-top: 100px;
+        border-bottom-left-radius: 150px; 
+        border-bottom-right-radius: 150px;
+    }
+
+    @media (max-width: $tablet) {
+        border-bottom-left-radius: 300px; 
+        border-bottom-right-radius: 300px;
+    }
+
+    &-wrap {
+        position: relative;
+        display: flex;
+        justify-content: center;
+        align-items: end;
+
+        @media (max-width: $tablet) {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .big__title{
+            position: absolute;
+            top: 200px;
+            left: 0;
+            z-index: 1;
+            width: 100%;
+            
+
+            p{
+                display: inline-flex;
+                justify-content: space-between;
+                width: 100%;
+                font-size: 174px;
+                font-weight: 900;
+            }
+
+            @media (max-width: $pc) {
+                top: 150px;
+                p{
+                    font-size: 100px;
+                }
+            }
+            @media (max-width: $tablet) {
+                position: relative;
+                top: 0;
+                left: 0;
+
+                p{
+                    justify-content: center;
+                    flex-wrap: wrap;
+                    font-size: 88px;
+                    line-height: 80%;
+                }
+            }
+        }
+    }
+
+    &-text{
+        flex: 0 0 auto;
+        margin-bottom: 133px;
+        padding-left: 6px;
+
+        .tagline-main{
+            font-weight: 700;
+            font-size: 36px;
+        }
+        .tagline-sub{
+            font-weight: 500;
+            font-size: 24px;
+            margin-top: 8px;
+        }
+
+        .chips{
+            margin-top: 24px;
+            display: flex;
+            flex-direction: column;
+            align-items: start;
+            gap: 12px;
+
+            span{
+                display: none;
+            }
+
+            .chip{
+                background: $primaryGr;
+                color: $white;
+                border-radius: 36px;
+                padding: 6px 16px;
+                font-weight: 500;
+            }
+        }
+        .price{
+            font-weight: 700;
+            font-size: 87px;
+            color: $primary;
+            margin-top: 24px;
+        }
+
+        @media (max-width: $pc) {
+            margin-bottom: 80px;
+            .tagline-main{
+                font-size: 24px;
+            }
+            .tagline-sub{
+                font-size: 18px;
+                margin-top: 8px;
+            }
+
+            .chips{
+                margin-top: 24px;
+                display: flex;
+                flex-direction: column;
+                align-items: start;
+                gap: 12px;
+
+                .chip{
+                    background: $primaryGr;
+                    color: $white;
+                    border-radius: 36px;
+                    padding: 6px 16px;
+                    font-weight: 500;
+                }
+            }
+            .price{
+                font-size: 50px;
+            }
+        }
+        @media (max-width: $tablet) {
+            text-align: center;
+            margin-top: 24px;
+            margin-bottom: 50px;
+            padding-left: 0;
+            display: flex;
+            flex-direction: column;
+
+            .tagline-main{
+                font-size: 36px;
+            }
+            .tagline-sub{
+                font-size: 24px;
+            }
+
+            .chips{
+                align-items: center;
+                order: 3;
+                flex-direction: row;
+                margin-top: 12px;
+
+                span{
+                    display: block;
+                }
+
+                .chip{
+                    background: none;
+                    padding: 0;
+                    color: $dark;
+                    font-size: 20px;
+                }
+            }
+        }
+    }
+
+    &-media{
+        position: relative;
+        margin-left: 54px;
+
+        span{
+            position: relative;
+            bottom: -173px;
+            width: 900px;
+            height: 900px;
+            border-radius: 900px;
+            border: 1px solid #DEDEDE;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            &::before{
+                content: '';
+                position: relative;
+                width: 500px;
+                height: 500px;
+                border-radius: 500px;
+                background: #FFE2E2;
+            }
+        }
+
+        img{
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            height: auto;
+            width: 100%;
+            max-width: 806px;
+        }
+
+        @media (max-width: $pc) {
+            margin-left: 30px;
+            span{
+                bottom: -100px;
+                width: 600px;
+                height: 600px;
+
+                &::before{
+                    width: 300px;
+                    height: 300px;
+                }
+            }
+
+            img{
+                max-width: 600px;
+            }
+        }
+        @media (max-width: $tablet) {
+            margin-left: 0;
+            span{
+                bottom: -50px;
+                width: 337px;
+                height: 337px;
+
+                &::before{
+                    width: 240px;
+                    height: 240px;
+                }
+            }
+
+            img{
+                max-width: 600px;
+            }
+        }
+    }
+
+    .btn-round{
+        margin-bottom: 133px;
+        margin-left: 20px;
+        width: 173px;
+        min-width: 173px;
+        height: 173px;
+        border-radius: 173px;
+        font-size: 24px;
+        white-space: wrap !important;
+
+        span{
+            text-decoration: underline;
+        }
+
+        @media (max-width: $pc) {
+            margin-bottom: 80px;
+            width: 100px;
+            min-width: 100px;
+            height: 100px;
+            font-size: 16px;
+        }
+
+        @media (max-width: $tablet) {
+            display: none;
+        }
+    }
+}
+.hero-mobile-btn{
+    display: none;
+
+    @media (max-width: $tablet) {
+        display: block;
+        margin: 0 auto;
+        width: 100%;
+        max-width: 380px;
+        padding: 0 15px;
+
+        a{
+            width: 100%;
+        }
+    }
+}

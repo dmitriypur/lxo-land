@@ -1,0 +1,96 @@
+@use './globals' as *;
+
+
+.faq { 
+    padding: 80px 0; 
+}
+.faq-list { 
+    display: grid; 
+    gap: 16px;
+    margin: 40px auto 0;
+    max-width: 1360px;
+
+    @media (max-width: $tablet) {
+        margin-top: 16px;
+    }
+}
+.q { 
+    background: $white; 
+    border-radius: 20px;
+    box-shadow: 0px 14px 24px 0px #8D68681F;
+    padding: 24px 30px;
+
+    @media (max-width: $tablet) {
+        padding: 16px;
+    }
+}
+.q-head { 
+    display: flex; 
+    align-items: center; 
+    justify-content: space-between; 
+    gap: 16px; 
+    width: 100%; 
+    background: none; 
+    border: 0; 
+    padding: 0; 
+    cursor: pointer; 
+}
+.q-head:focus-visible { 
+    outline: 2px solid $primary; 
+    outline-offset: 4px; 
+}
+.q.open .q-icon { 
+    border-color: $primary;
+
+    svg {
+        transform: rotate(45deg);
+        *{
+            fill: $primary;
+        }
+    }
+}
+
+.q-body {
+    color: $dark; 
+    max-height: 0; 
+    overflow: hidden; 
+    opacity: 0; 
+    transition: max-height .3s ease, 
+    opacity .3s ease;
+    text-align: left;
+    padding-top: 8px;
+}
+.q-title {
+    font-size: 24px;
+    font-weight: 700;
+    text-align: left;
+
+    @media (max-width: $tablet) {
+        font-size: 16px;
+    }
+}
+.q-icon { 
+    width: 60px;
+    min-width: 60px;
+    height: 60px; 
+    border-radius: 1000px; 
+    border: 1px solid #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .3s;
+
+    svg{
+        transition: transform .3s;
+
+        *{
+            transition: fill .3s;
+        }
+    }
+
+    @media (max-width: $tablet) {
+        width: 40px;
+        min-width: 40px;
+        height: 40px; 
+    }
+}
