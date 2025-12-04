@@ -108,6 +108,25 @@ const formatPhoneValue = (value) => {
   return formatted.trim();
 };
 
+const postFormData = async (payload) => {
+  const response = await fetch('/api/cta.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(payload),
+  });
+
+  const data = await response.json().catch(() => ({}));
+
+  if (!response.ok || data?.success === false) {
+    const message = typeof data?.message === 'string' ? data.message : 'request-failed';
+    throw new Error(message);
+  }
+
+  return data;
+};
+
 const initCtaFormValidation = () => {
   const form = document.querySelector('.cta .form');
   if (!form) return;
@@ -208,7 +227,27 @@ const initCtaFormValidation = () => {
     });
   });
 
-  form.addEventListener('submit', (event) => {
+  const setSubmitState = (isSubmitting) => {
+    const submitButton = form.querySelector('.submit');
+    if (!(submitButton instanceof HTMLButtonElement)) return;
+    submitButton.disabled = isSubmitting;
+    submitButton.classList.toggle('is-loading', isSubmitting);
+  };
+
+  const sendForm = async () => {
+    if (!nameInput || !phoneInput) return;
+    const payload = {
+      name: nameInput.value.trim(),
+      phone: phoneInput.value.replace(/\D/g, ''),
+      consent: agreeInputs.some((input) => input.checked),
+      form: 'cta',
+      source: window.location.href,
+    };
+
+    return postFormData(payload);
+  };
+
+  form.addEventListener('submit', async (event) => {
     const isValid = [validateName(), validatePhone(), validateAgree()].every(Boolean);
     if (!isValid) {
       event.preventDefault();
@@ -219,6 +258,28 @@ const initCtaFormValidation = () => {
         const visibleAgreeInput = agreeInputs.find((input) => input.offsetParent !== null);
         visibleAgreeInput?.focus();
       }
+      return;
+    }
+
+    event.preventDefault();
+    setSubmitState(true);
+
+    try {
+      await sendForm();
+      form.reset();
+      agreeWrappers.forEach((wrapper) => wrapper.classList.remove('has-error'));
+      setFieldError('name', '');
+      setFieldError('phone', '');
+      setFieldError('agree', '');
+      phoneInput.classList.remove('input--invalid');
+      nameInput.classList.remove('input--invalid');
+      window.dispatchEvent(new CustomEvent('cta-form:success'));
+    } catch (error) {
+      console.error('Ошибка отправки формы', error);
+      const errorMessage = error instanceof Error ? error.message : 'Ошибка отправки, попробуйте позже';
+      setFieldError('agree', errorMessage);
+    } finally {
+      setSubmitState(false);
     }
   });
 };
@@ -381,37 +442,3 @@ function initUTMPhone() {
 
 // Запуск при загрузке страницы
 document.addEventListener('DOMContentLoaded', initUTMPhone);
-
-
-
-
-// Отправка формы
-
-document.getElementById('callback-form').addEventListener('submit', async (e) => {
-  e.preventDefault();
-
-  const form = e.target;
-  const formData = new FormData(form);
-  const data = Object.fromEntries(formData);
-
-  try {
-    const response = await fetch(import.meta.env.VITE_API_BASE_URL + '/events?action=callrequest', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-LO-Token': import.meta.env.VITE_LO_TOKEN,
-      },
-      body: JSON.stringify(data),
-    });
-
-    if (response.ok) {
-      console.log(response);
-      form.reset();
-    } else {
-      alert('Ошибка при отправке.');
-    }
-  } catch (error) {
-    console.error('Ошибка:', error);
-    alert('Не удалось подключиться к серверу.');
-  }
-});

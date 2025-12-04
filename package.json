@@ -4,7 +4,8 @@
   "main": "index.js",
   "scripts": {
     "dev": "vite",
-    "build": "vite build",
+    "build": "vite build && npm run copy-api",
+    "copy-api": "node scripts/copy-api.mjs",
     "preview": "vite preview"
   },
   "keywords": [],

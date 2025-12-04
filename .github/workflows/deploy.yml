@@ -37,7 +37,7 @@ jobs:
           fi
           echo "$SSH_PRIVATE_KEY" > key.pem
           chmod 600 key.pem
-          rsync -az --delete \
+          rsync -az --delete --exclude='.env' \
             -e "ssh -i key.pem -p ${SSH_PORT:-22} -o StrictHostKeyChecking=no" \
             dist/ ${SSH_USER}@${SSH_HOST}:${DEPLOY_PATH}
           rm key.pem
