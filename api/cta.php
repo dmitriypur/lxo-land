@@ -115,12 +115,13 @@ $statusCode = curl_getinfo($ch, CURLINFO_HTTP_CODE) ?: 0;
 curl_close($ch);
 
 if ($curlError) {
+    error_log('[cta.php] CURL error: ' . $curlError);
     json_response(502, ['success' => false, 'message' => 'Ошибка соединения с 1С']);
 }
 
 if ($statusCode < 200 || $statusCode >= 300) {
+    error_log(sprintf('[cta.php] 1C response (%d): %s', $statusCode, $responseBody));
     json_response(502, ['success' => false, 'message' => '1С вернула ошибку', 'details' => $responseBody]);
 }
 
 json_response(200, ['success' => true, 'message' => 'Заявка отправлена']);
-
