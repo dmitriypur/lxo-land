@@ -92,9 +92,6 @@ if (!$apiUrl || !$token) {
 $payload = [
     'name' => $name,
     'phone' => $phone,
-    'consent' => $consent,
-    'form' => $form,
-    'source' => $source,
 ];
 
 $ch = curl_init($apiUrl);
