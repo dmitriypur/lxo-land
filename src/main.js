@@ -38,8 +38,163 @@ const initFaqAccordion = () => {
   });
 };
 
+const sanitizeNameValue = (value) => value.replace(/[^А-Яа-яЁё\s-]/g, '');
+
+const formatPhoneValue = (value) => {
+  const digits = value.replace(/\D/g, '');
+  if (!digits) return '';
+
+  let normalized = digits;
+  if (normalized.startsWith('8')) {
+    normalized = `7${normalized.slice(1)}`;
+  } else if (!normalized.startsWith('7')) {
+    normalized = `7${normalized}`;
+  }
+
+  normalized = normalized.slice(0, 11);
+  let formatted = '+7';
+  const rest = normalized.slice(1);
+
+  if (rest.length) {
+    formatted += ` (${rest.slice(0, Math.min(3, rest.length))}`;
+  }
+
+  if (rest.length >= 3) {
+    const mid = rest.slice(3, 6);
+    formatted += `) ${mid}`;
+  }
+
+  if (rest.length >= 6) {
+    const next = rest.slice(6, 8);
+    formatted += ` ${next}`;
+  }
+
+  if (rest.length >= 8) {
+    const tail = rest.slice(8, 10);
+    formatted += ` ${tail}`;
+  }
+
+  return formatted.trim();
+};
+
+const initCtaFormValidation = () => {
+  const form = document.querySelector('.cta .form');
+  if (!form) return;
+
+  const nameInput = form.querySelector('#name');
+  const phoneInput = form.querySelector('#phone');
+  const agreeInputs = Array.from(form.querySelectorAll('input[name="agree"]'));
+  const agreeWrappers = Array.from(form.querySelectorAll('[data-field="agree"]'));
+
+  const errorBlocks = {
+    name: Array.from(form.querySelectorAll('[data-error-for="name"]')),
+    phone: Array.from(form.querySelectorAll('[data-error-for="phone"]')),
+    agree: Array.from(form.querySelectorAll('[data-error-for="agree"]')),
+  };
+
+  const setFieldError = (field, message) => {
+    errorBlocks[field]?.forEach((el) => {
+      el.textContent = message;
+    });
+  };
+
+  const toggleAgreeError = (hasError) => {
+    agreeWrappers.forEach((wrapper) => wrapper.classList.toggle('has-error', hasError));
+  };
+
+  const validateName = () => {
+    if (!nameInput) return true;
+    const sanitized = sanitizeNameValue(nameInput.value);
+    if (sanitized !== nameInput.value) {
+      nameInput.value = sanitized;
+    }
+    const trimmed = sanitized.trim();
+    let message = '';
+    if (!trimmed) {
+      message = 'Укажите имя';
+    }
+    nameInput.classList.toggle('input--invalid', Boolean(message));
+    setFieldError('name', message);
+    return !message;
+  };
+
+  const validatePhone = () => {
+    if (!phoneInput) return true;
+    const digits = phoneInput.value.replace(/\D/g, '');
+    let message = '';
+    if (digits.length < 11) {
+      message = 'Введите номер полностью';
+    }
+    phoneInput.classList.toggle('input--invalid', Boolean(message));
+    setFieldError('phone', message);
+    return !message;
+  };
+
+  const validateAgree = () => {
+    if (!agreeInputs.length) return true;
+    const isChecked = agreeInputs.some((input) => input.checked);
+    const message = isChecked ? '' : 'Нужно ваше согласие';
+    toggleAgreeError(Boolean(message));
+    setFieldError('agree', message);
+    return isChecked;
+  };
+
+  const handlePhoneInput = () => {
+    if (!phoneInput) return;
+    const formatted = formatPhoneValue(phoneInput.value);
+    phoneInput.value = formatted;
+    validatePhone();
+  };
+
+  const syncAgreeInputs = (source) => {
+    agreeInputs.forEach((input) => {
+      if (input !== source) {
+        input.checked = source.checked;
+      }
+    });
+  };
+
+  nameInput?.addEventListener('input', validateName);
+  phoneInput?.addEventListener('input', handlePhoneInput);
+  phoneInput?.addEventListener('focus', () => {
+    if (!phoneInput.value) {
+      phoneInput.value = '+7 (';
+    }
+  });
+  phoneInput?.addEventListener('blur', () => {
+    if (phoneInput.value.replace(/\D/g, '').length <= 1) {
+      phoneInput.value = '';
+    }
+    validatePhone();
+  });
+
+  agreeInputs.forEach((input) => {
+    input.addEventListener('change', (event) => {
+      const target = event.target;
+      if (!(target instanceof HTMLInputElement)) return;
+      syncAgreeInputs(target);
+      validateAgree();
+    });
+  });
+
+  form.addEventListener('submit', (event) => {
+    const isValid = [validateName(), validatePhone(), validateAgree()].every(Boolean);
+    if (!isValid) {
+      event.preventDefault();
+      const firstErrorInput = form.querySelector('.input--invalid');
+      if (firstErrorInput instanceof HTMLElement) {
+        firstErrorInput.focus();
+      } else {
+        const visibleAgreeInput = agreeInputs.find((input) => input.offsetParent !== null);
+        visibleAgreeInput?.focus();
+      }
+    }
+  });
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
+  initCtaFormValidation();
 });
 
 

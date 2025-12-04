@@ -365,23 +365,29 @@
     <div class="cta__container">
       <h2 class="section-title">Запишитесь на подбор очков уже сейчас!</h2>
       <p class="sub">Заполните короткую форму обратной связи для записи</p>
-      <form class="form">
+      <form class="form" novalidate>
         <div class="fields">
-          <label for="name">Ваше имя
-          <input class="input" type="text" name="name" id="name" placeholder="Укажите имя" required>
+          <label class="form-field" for="name">
+            <span>Ваше имя</span>
+            <input class="input" type="text" name="name" id="name" placeholder="Укажите имя" required>
+            <p class="field-error" data-error-for="name"></p>
           </label>
-          <label for="phone">Телефон
-          <input class="input" type="tel" name="phone" id="phone" placeholder="+7 (___) ___ __ __" required>
+          <label class="form-field" for="phone">
+            <span>Телефон</span>
+            <input class="input" type="tel" name="phone" id="phone" placeholder="+7 (___) ___ __ __" required>
+            <p class="field-error" data-error-for="phone"></p>
           </label>
-          <div class="agree agree-m">
-            <input id="agree-m" type="checkbox" name="agree" required>
+          <div class="agree agree-m" data-field="agree">
+            <input id="agree-m" type="checkbox" name="agree">
             <label for="agree-m">Даю согласие на обработку персональных данных</label>
+            <p class="field-error" data-error-for="agree"></p>
           </div>
           <button class="btn btn-red submit" type="submit"><span>Записаться на подбор</span></button>
         </div>
-        <div class="agree">
-          <input id="agree" type="checkbox" name="agree" required>
+        <div class="agree" data-field="agree">
+          <input id="agree" type="checkbox" name="agree">
           <label for="agree">Даю согласие на обработку персональных данных</label>
+          <p class="field-error" data-error-for="agree"></p>
         </div>
       </form>
     </div>

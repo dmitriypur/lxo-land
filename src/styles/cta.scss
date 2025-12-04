@@ -41,10 +41,6 @@
     gap: 20px; 
     align-items: flex-end;
 
-    label{
-        font-size: 14px;
-    }
-
     &>*{
         width: calc(100% / 3);
     }
@@ -72,6 +68,33 @@
     flex: 1; 
     min-width: 0; 
 }
+.form-field {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    font-size: 14px;
+}
+.form-field span {
+    font-size: 14px;
+    font-weight: 500;
+}
+.input.input--invalid {
+    border-color: rgba($primary, .8);
+    background: rgba($primary, .06);
+}
+.field-error {
+    position: absolute;
+    left: 0;
+    bottom: -20px;
+    font-size: 14px;
+    color: $primary;
+    margin-top: 6px;
+    min-height: 18px;
+    line-height: 1.2;
+}
+.field-error:empty {
+    display: none;
+}
 .form .submit { 
     height: 56px; 
     padding: 0 24px; 
@@ -91,6 +114,14 @@
     @media (max-width: $tablet) {
         display: none;
     }
+}
+
+.agree.has-error label {
+    color: $primary;
+}
+
+.agree .field-error {
+    font-size: 14px;
 }
 
 .agree input {
