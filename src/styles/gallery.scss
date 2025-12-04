@@ -35,5 +35,5 @@
 }
 .swiper-button-prev, .swiper-button-next { 
     color: $primary;
-    display: none;
+    display: none !important;
 }

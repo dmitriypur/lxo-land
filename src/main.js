@@ -1,4 +1,5 @@
 import './styles.scss';
+import 'swiper/css/bundle';
 import './js/watcher.js';
 
 // FAQ accordion logic (single open item, first click works).
@@ -39,6 +40,36 @@ const initFaqAccordion = () => {
 };
 
 const sanitizeNameValue = (value) => value.replace(/[^А-Яа-яЁё\s-]/g, '');
+
+const initGallerySlider = async () => {
+  const sliderEl = document.querySelector('.gallery-slider');
+  if (!sliderEl) return;
+
+  try {
+    const { default: Swiper } = await import('swiper/bundle');
+    // eslint-disable-next-line no-new
+    new Swiper('.gallery-slider', {
+      loop: true,
+      loopedSlides: 5,
+      centeredSlides: true,
+      centeredSlidesBounds: true,
+      initialSlide: 2,
+      spaceBetween: 24,
+      slidesPerView: 1,
+      autoplay: {
+        delay: 3000,
+      },
+      // navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+      breakpoints: {
+        0: { slidesPerView: 1.3, centeredSlides: true },
+        576: { slidesPerView: 2.5 },
+        768: { slidesPerView: 4 },
+      },
+    });
+  } catch (error) {
+    console.error('Не удалось загрузить слайдер', error);
+  }
+};
 
 const formatPhoneValue = (value) => {
   const digits = value.replace(/\D/g, '');
@@ -192,9 +223,39 @@ const initCtaFormValidation = () => {
   });
 };
 
+const initLazyMap = () => {
+  const iframe = document.querySelector('#map-container iframe[data-map-src]');
+  if (!iframe) return;
+
+  const loadMap = () => {
+    const mapSrc = iframe.dataset.mapSrc;
+    if (mapSrc) {
+      iframe.src = mapSrc;
+      iframe.removeAttribute('data-map-src');
+    }
+  };
+
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          loadMap();
+          obs.disconnect();
+        }
+      });
+    }, { rootMargin: '200px 0px' });
+
+    observer.observe(document.querySelector('#map') ?? iframe);
+  } else {
+    loadMap();
+  }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
+  initGallerySlider();
   initCtaFormValidation();
+  initLazyMap();
 });
 
 
@@ -235,23 +296,3 @@ if (burger && closeBtn && content) {
     }
   });
 }
-
-
-const swiper = new Swiper('.gallery-slider', {
-    loop: true,
-    loopedSlides: 5,
-    centeredSlides: true,
-    centeredSlidesBounds: true,
-    initialSlide: 2,
-    spaceBetween: 24,
-    slidesPerView: 1,
-    autoplay: {
-      delay: 3000,
-    },
-    navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
-    breakpoints: {
-      0:   { slidesPerView: 1.3, centeredSlides: true },
-      576: { slidesPerView: 2.5 },
-      768: { slidesPerView: 4 },
-    }
-});

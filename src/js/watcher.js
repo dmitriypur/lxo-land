@@ -2,6 +2,8 @@
 import { uniqArray, FLS } from "./functions.js";
 import { flsModules } from "./modules.js";
 
+const isDevEnv = typeof import.meta !== 'undefined' && import.meta.env && import.meta.env.DEV;
+
 // Наблюдатель объектов [всевидещее око]
 // data-watch - можно писать значение для применения кастомного кода
 // data-watch-root - родитель внутри которого налюдать за объектом
@@ -166,4 +168,6 @@ class ScrollWatcher {
 	}
 }
 // Запускаем и добавляем в объект модулей
-flsModules.watcher = new ScrollWatcher({});
+flsModules.watcher = new ScrollWatcher({
+	logging: Boolean(isDevEnv),
+});
