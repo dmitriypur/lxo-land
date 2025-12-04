@@ -52,10 +52,10 @@
 
   <section class="hero" id="hero">
     <div class="hero__container hero-wrap">
-      <div class="big__title">
+      <div data-watch data-watch-once data-watch-root=".hero-wrap" class="big__title">
         <p>Новые <span>очки</span></p>
       </div>
-      <div class="hero-text">
+      <div data-watch data-watch-once data-watch-root=".hero-wrap" class="hero-text">
         <div class="hero-taglines">
           <div class="tagline-main">Всё включено!</div>
           <div class="tagline-sub">в сети «Люкс Оптика»</div>
@@ -72,10 +72,13 @@
         <div class="price">3 500 ₽</div>
       </div>
       <div class="hero-media">
-        <span></span>
-        <img src="assets/hero.webp" alt="Оправа" loading="eager">
+        <span data-watch data-watch-once data-watch-root=".hero-wrap"></span>
+        <div data-watch data-watch-once data-watch-root=".hero-wrap" class="img-wrap">
+          <img src="assets/hero.webp" alt="Оправа" loading="eager">
+        </div>
+        
       </div>
-      <a class="btn btn-red btn-round" href="#offers">
+      <a data-watch data-watch-once data-watch-root=".hero-wrap" class="btn btn-red btn-round" href="#offers">
         <span>Выбрать пакет</span>
       </a>
     </div>

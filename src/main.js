@@ -1,4 +1,5 @@
 import './styles.scss';
+import './js/watcher.js';
 
 // FAQ accordion logic (single open item, first click works).
 const initFaqAccordion = () => {
