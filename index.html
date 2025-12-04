@@ -33,8 +33,9 @@
         </nav>
         <div class="contacts">
           <a class="phone" href="tel:+78332218822">
-            <span><img src="assets/icons/phone.svg" alt="Иконка телефонной трубки"></span>
-            +7 (8332) 21-88-22</a>
+            <span class="icon-phone"><img src="assets/icons/phone.svg" alt="Иконка телефонной трубки"></span>
+            <span data-phone="target">+7 (8332) 21-88-22</span>
+          </a>
           <a class="btn btn-red" href="#cta">
             <span>Записаться на подбор</span>
           </a>
@@ -364,7 +365,7 @@
     <div class="cta__container">
       <h2 class="section-title">Запишитесь на подбор очков уже сейчас!</h2>
       <p class="sub">Заполните короткую форму обратной связи для записи</p>
-      <form class="form" novalidate>
+      <form id="callback-form" class="form" novalidate>
         <div class="fields">
           <label class="form-field" for="name">
             <span>Ваше имя</span>
@@ -402,7 +403,7 @@
         <div class="map__container">
           <div class="map-card">
             <div class="map-card-content">
-              <a href="tel:78332217711" class="card-phone inp">+7 (8332) 21-77-11</a>
+              <a href="tel:78332217711" class="card-phone inp" data-phone="target">+7 (8332) 21-88-22</a>
               <p class="hours inp">Пн-Сб: 09:00-19:00, <span>Вс: 09:00-18:00</span></p>
               <a href="#cta" class="btn btn-red"><span>Записаться на подбор</span></a>
             </div>

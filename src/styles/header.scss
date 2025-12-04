@@ -78,7 +78,7 @@
             font-weight: 500;
             flex: 0 0 auto;
 
-            span{
+            .icon-phone{
                 display: none;
             }
         }
@@ -155,7 +155,7 @@
                 align-items: center;
                 gap: 14px;
 
-                span{
+                .icon-phone{
                     display: block;
                 }
             }

@@ -296,3 +296,122 @@ if (burger && closeBtn && content) {
     }
   });
 }
+
+
+// Конфигурация телефонов по UTM
+const UTM_PHONE_MAP = {
+  // Пример: { source: 'yandex', medium: 'cpc' } → телефон
+  'yandex_karty': '+7 (495) 145-74-92',
+  'yandex': {
+    'cpc': '+7 (495) 123-45-67',
+    'seo': '+7 (495) 987-65-43',
+  },
+  'google': {
+    'cpc': '+7 (495) 111-22-33',
+    'organic': '+7 (495) 333-22-11',
+  },
+  'vk': '+7 (495) 555-66-77',
+  'telegram': '+7 (495) 777-88-99',
+  // ... другие источники
+  'default': '+7 (8332) 21-88-22', // телефон по умолчанию
+};
+
+// Извлечение параметров UTM из URL
+function getUTMParams() {
+  const urlParams = new URLSearchParams(window.location.search);
+  const utmSource = urlParams.get('utm_source');
+  const utmMedium = urlParams.get('utm_medium');
+
+  return { utmSource, utmMedium };
+}
+
+// Получение телефона по UTM
+function getPhoneByUTM(utmSource, utmMedium) {
+  if (!utmSource) return UTM_PHONE_MAP.default;
+
+  const sourceConfig = UTM_PHONE_MAP[utmSource];
+
+  // Если для источника задан конкретный телефон (не объект)
+  if (typeof sourceConfig === 'string') {
+    return sourceConfig;
+  }
+
+  // Если источник — объект с medium
+  if (sourceConfig && typeof sourceConfig === 'object' && utmMedium) {
+    return sourceConfig[utmMedium] || UTM_PHONE_MAP.default;
+  }
+
+  return UTM_PHONE_MAP.default;
+}
+
+// Сохранение UTM и телефона в сессию
+function saveUTMToSession(utmSource, utmMedium, phone) {
+  sessionStorage.setItem('utm_source', utmSource);
+  sessionStorage.setItem('utm_medium', utmMedium);
+  sessionStorage.setItem('phone', phone);
+}
+
+// Чтение из сессии
+function getSavedPhone() {
+  return sessionStorage.getItem('phone') || UTM_PHONE_MAP.default;
+}
+
+// Основная функция инициализации
+function initUTMPhone() {
+  const { utmSource, utmMedium } = getUTMParams();
+
+  let phone;
+
+  if (utmSource) {
+    // Пришёл UTM — определяем телефон и сохраняем
+    phone = getPhoneByUTM(utmSource, utmMedium);
+    saveUTMToSession(utmSource, utmMedium, phone);
+  } else {
+    // Нет UTM в URL — берём из сессии
+    phone = getSavedPhone();
+  }
+
+  // Подставляем телефон на страницу
+  // Пример: ищем элемент с data-phone="target"
+  document.querySelectorAll('[data-phone="target"]').forEach(el => {
+    el.textContent = phone;
+    el.href = `tel:${phone.replace(/\D/g, '')}`; // для ссылки tel:+74951234567
+  });
+}
+
+// Запуск при загрузке страницы
+document.addEventListener('DOMContentLoaded', initUTMPhone);
+
+
+
+
+// Отправка формы
+
+document.getElementById('callback-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+
+  const form = e.target;
+  const formData = new FormData(form);
+  const data = Object.fromEntries(formData);
+
+  try {
+    const response = await fetch(import.meta.env.VITE_API_BASE_URL + '/events?action=callrequest', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-LO-Token': import.meta.env.VITE_LO_TOKEN,
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      console.log(response);
+      form.reset();
+    } else {
+      alert('Ошибка при отправке.');
+    }
+  } catch (error) {
+    console.error('Ошибка:', error);
+    alert('Не удалось подключиться к серверу.');
+  }
+});
