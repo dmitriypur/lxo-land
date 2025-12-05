@@ -1,6 +1,7 @@
 import './styles.scss';
 import 'swiper/css/bundle';
 import './js/watcher.js';
+import './js/popup.js';
 
 // FAQ accordion logic (single open item, first click works).
 const initFaqAccordion = () => {
@@ -127,12 +128,14 @@ const postFormData = async (payload) => {
   return data;
 };
 
-const initCtaFormValidation = () => {
-  const form = document.querySelector('.cta .form');
-  if (!form) return;
+const initFormValidation = () => {
+  const forms = Array.from(document.querySelectorAll('form.form'));
+  forms.forEach((form, index) => attachFormHandlers(form, index));
+};
 
-  const nameInput = form.querySelector('#name');
-  const phoneInput = form.querySelector('#phone');
+const attachFormHandlers = (form, index) => {
+  const nameInput = form.querySelector('input[name="name"]');
+  const phoneInput = form.querySelector('input[name="phone"]');
   const agreeInputs = Array.from(form.querySelectorAll('input[name="agree"]'));
   const agreeWrappers = Array.from(form.querySelectorAll('[data-field="agree"]'));
 
@@ -159,10 +162,7 @@ const initCtaFormValidation = () => {
       nameInput.value = sanitized;
     }
     const trimmed = sanitized.trim();
-    let message = '';
-    if (!trimmed) {
-      message = 'Укажите имя';
-    }
+    const message = trimmed ? '' : 'Укажите имя';
     nameInput.classList.toggle('input--invalid', Boolean(message));
     setFieldError('name', message);
     return !message;
@@ -171,10 +171,7 @@ const initCtaFormValidation = () => {
   const validatePhone = () => {
     if (!phoneInput) return true;
     const digits = phoneInput.value.replace(/\D/g, '');
-    let message = '';
-    if (digits.length < 11) {
-      message = 'Введите номер полностью';
-    }
+    const message = digits.length < 11 ? 'Введите номер полностью' : '';
     phoneInput.classList.toggle('input--invalid', Boolean(message));
     setFieldError('phone', message);
     return !message;
@@ -235,12 +232,11 @@ const initCtaFormValidation = () => {
   };
 
   const sendForm = async () => {
-    if (!nameInput || !phoneInput) return;
     const payload = {
-      name: nameInput.value.trim(),
-      phone: phoneInput.value.replace(/\D/g, ''),
+      name: nameInput?.value.trim() ?? '',
+      phone: phoneInput?.value.replace(/\D/g, '') ?? '',
       consent: agreeInputs.some((input) => input.checked),
-      form: 'cta',
+      form: form.dataset.form ?? form.getAttribute('id') ?? `form-${index + 1}`,
       source: window.location.href,
     };
 
@@ -271,9 +267,9 @@ const initCtaFormValidation = () => {
       setFieldError('name', '');
       setFieldError('phone', '');
       setFieldError('agree', '');
-      phoneInput.classList.remove('input--invalid');
-      nameInput.classList.remove('input--invalid');
-      window.dispatchEvent(new CustomEvent('cta-form:success'));
+      phoneInput?.classList.remove('input--invalid');
+      nameInput?.classList.remove('input--invalid');
+      window.dispatchEvent(new CustomEvent('cta-form:success', { detail: { form } }));
     } catch (error) {
       console.error('Ошибка отправки формы', error);
       const errorMessage = error instanceof Error ? error.message : 'Ошибка отправки, попробуйте позже';
@@ -315,7 +311,7 @@ const initLazyMap = () => {
 document.addEventListener('DOMContentLoaded', () => {
   initFaqAccordion();
   initGallerySlider();
-  initCtaFormValidation();
+  initFormValidation();
   initLazyMap();
 });
 
