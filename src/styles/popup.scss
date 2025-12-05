@@ -9,6 +9,7 @@ body::after {
 	opacity: 0;
 	transition: opacity 0.8s ease 0s;
 	pointer-events: none;
+	backdrop-filter: blur(10px);
 	z-index: 149;
 }
 .popup-show body::after {
