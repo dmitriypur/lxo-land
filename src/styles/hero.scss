@@ -54,16 +54,18 @@
                 font-weight: 900;
             }
 
-            @media (max-width: $pc) {
-                top: 150px;
-                p{
-                    font-size: 100px;
-                }
-
+            @media (max-width: 1600px) {
                 &._watcher-view{
                     top: 150px;
                 }
             }
+
+            @media (max-width: $pc) {
+                p{
+                    font-size: 100px;
+                }
+            }
+            
             @media (max-width: $tablet) {
                 position: relative;
                 top: 0;
@@ -251,6 +253,22 @@
             position: absolute;
             left: 0;
             bottom: 0;
+        }
+
+        @media (max-width: 1600px) {
+            span{
+                width: 800px;
+                height: 800px;
+            }
+
+            &::before{
+                width: 400px;
+                height: 400px;
+            }
+
+            .img-wrap{
+                max-width: 700px;
+            }
         }
 
         @media (max-width: $pc) {
