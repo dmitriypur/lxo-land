@@ -322,7 +322,8 @@
         min-width: 173px;
         height: 173px;
         border-radius: 173px;
-        font-size: 24px;
+        font-size: 20px;
+        line-height: 100%;
         white-space: wrap !important;
         transform: scale(0.2);
         opacity: 0;
@@ -340,10 +341,10 @@
 
         @media (max-width: $pc) {
             margin-bottom: 80px;
-            width: 100px;
-            min-width: 100px;
-            height: 100px;
-            font-size: 16px;
+            width: 120px;
+            min-width: 120px;
+            height: 120px;
+            font-size: 14px;
         }
 
         @media (max-width: $tablet) {

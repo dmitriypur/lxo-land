@@ -160,9 +160,9 @@
         gap: 10px; 
     }
     .bullet-icon { 
-        width: 24px; 
-        height: 24px; 
-        flex: 0 0 24px; 
+        width: 40px; 
+        height: 40px; 
+        flex: 0 0 40px; 
     }
     .offer-two .offer-features .highlight { 
         background: rgba(255,255,255,.23); 
@@ -170,6 +170,7 @@
         padding: 8px 12px;
         position: relative;
         left: -10px;
+        max-width: 410px;
     }
     .offer-two::before { 
         content: ""; 
